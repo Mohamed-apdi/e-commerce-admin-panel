@@ -1,6 +1,6 @@
 import { getUsers } from '@/features/customers/customerSlice';
 import { Pencil, Trash2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -12,12 +12,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
+
+
 const Customers = () => {
   const dispatch = useDispatch();
+  
 
   useEffect(() => {
-      dispatch(getUsers());
+    dispatch(getUsers());
   }, [dispatch]);
 
   const { customers, isLoading } = useSelector((state) => state.customer);
@@ -46,10 +49,13 @@ const Customers = () => {
     )
   }));
 
+ 
+
   return (
     <div className="my-4">
       <div className='bg-white shadow-md rounded-sm border'>
         <h3 className="scroll-m-20 text-2xl pl-7 py-4 font-semibold tracking-tight">Customers List</h3>
+        
         <Table>
           <TableHeader>
             <TableRow>
@@ -64,7 +70,7 @@ const Customers = () => {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              Array.from({ length: data.length }).map((_, index) => (
+              Array.from({ length: data.limit }).map((_, index) => (
                 <TableRow key={index}>
                   <TableCell><Skeleton className="h-5 w-10" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
@@ -90,6 +96,7 @@ const Customers = () => {
             )}
           </TableBody>
         </Table>
+        
       </div>
     </div>
   );

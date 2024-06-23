@@ -166,3 +166,8 @@
     main::-webkit-scrollbar {
       width: 0px;
     }
+    .cursor-not-allowed {
+      cursor: not-allowed;
+      color: rgb(149, 0, 255);
+    }
+    

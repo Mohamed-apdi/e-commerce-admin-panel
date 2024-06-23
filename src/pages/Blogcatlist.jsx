@@ -1,5 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Table } from 'antd';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -19,20 +27,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 
-const columns = [
-  {
-    title: 'No.',
-    dataIndex: 'no',
-  },
-  {
-    title: 'Title',
-    dataIndex: 'title',
-  },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-  },
-  ];
  
   let schema = Yup.object().shape({
     title: Yup.string().required("Title is Required"),
@@ -49,7 +43,7 @@ const Blogcatlist = () => {
     dispatch(getBlogCategorys());
   },[dispatch]);
 
-  const bcategoryState = useSelector((state) => state.bcategory.blogCategorys)
+  const {blogCategorys, isLoading} = useSelector((state) => state.bcategory)
 
   const handleCategoryDelete = (id) => {
     dispatch(deleteCategory(id)).then(() => {
@@ -95,15 +89,11 @@ const Blogcatlist = () => {
     }
   });
 
-  const data = [];
-  for (let i = 0; i < bcategoryState.length; i++) {
-    data.push({
-      no: i + 1,
-      title: bcategoryState[i].title,
-      action: <div className='flex gap-2'><Link><Pencil onClick={() => handleCategoryEdit(bcategoryState[i])} className='w-6 h-6 text-green-500 text-center hover:bg-gray-200  rounded p-[4px]'/></Link><Link><Trash2 onClick={() => handleCategoryDelete(bcategoryState[i]._id)} className='text-red-500 w-6 h-6 text-center hover:bg-gray-200  rounded p-[4px]'/></Link></div>,
-  
-    });
-  }
+  const data = blogCategorys.map((category, index) => ({
+    no: index + 1,
+    title: category.title,
+    action: <div className='flex gap-2'><Link><Pencil onClick={() => handleCategoryEdit(category)} className='w-6 h-6 text-green-500 text-center hover:bg-gray-200  rounded p-[4px]'/></Link><Link><Trash2 onClick={() => handleCategoryDelete(category._id)} className='text-red-500 w-6 h-6 text-center hover:bg-gray-200  rounded p-[4px]'/></Link></div>,
+  }))
 
 
   return (
@@ -156,7 +146,34 @@ const Blogcatlist = () => {
       </DialogContent>
     </Dialog>
     </div>
-    <Table  columns={columns} dataSource={data} />
+    <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">No</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: data.length }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell><Skeleton className="h-5 w-10" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
+                </TableRow>
+              ))
+            ) : (
+              data.map((item, key) => (
+                <TableRow key={key}>
+                  <TableCell>{item.no}</TableCell>
+                  <TableCell className="font-medium text-sm">{item.title}</TableCell>
+                  <TableCell className="text-right">{item.action}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
     </div>
     <Toaster
         position="top-center"

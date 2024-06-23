@@ -1,47 +1,17 @@
 import { getOrders } from '@/features/Orders/orderSlice';
-import { Table } from 'antd';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-const columns = [
-  {
-    title: 'No.',
-    dataIndex: 'no',
-  },
-  {
-    title: 'Product',
-    dataIndex: 'product',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-  },
-  {
-    title: 'Count',
-    dataIndex: 'count',
-  },
-  {
-    title: "Color",
-    dataIndex: "color",
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-  },
-  {
-    title: 'Method',
-    dataIndex: 'method',
-  },
-  {
-    title: 'Amount',
-    dataIndex: 'amount',
-  },
-  {
-    title: "Orderby",
-    dataIndex: "orderby",
-  }
-];
 
 
 const Order = () => {
@@ -52,30 +22,66 @@ const Order = () => {
     dispatch(getOrders());
   },[dispatch]);
 
-  const orderState = useSelector((state) => state.order.orders);
+  const {orders, isLoading} = useSelector((state) => state.order);
 
-   // Transform orderState into a format suitable for the table
-  const data = orderState.map((order, index) => {
-    const firstProduct = order.products[0] || {}; // Accessing the first product safely
-
-    return {
-      no: index + 1, // Showing order number starting from 1
-      product: firstProduct.product.title, // Provide a default value if not available
-      status: order.orderStatus,
-      count: firstProduct.count, // Provide a default value if not available
-      color: firstProduct.color, // Provide a default value if not available
-      method: order.paymentIntent.method,
-      date:new Date(order.createdAt).toLocaleString(),
-      amount: order.paymentIntent.amount,
-      orderby: order.orderby.fastname,
-    };
-  });
+  
+  const data = orders.map((order, index) => ({
+    no: index + 1,
+    product: order.products.map((item) => item.product.title).join(", "),
+    status: order.orderStatus,
+    count: order.products.map((item) => item.count).join(", "), 
+    color: order.products.map((item) => item.product.color).join(", "), // Adjusted to match your data structure
+    price: order.products.map((item) => item.product.price).join(", "),
+    method: order.paymentIntent.method,
+    date: new Date(order.createdAt).toLocaleString(),
+    amount: order.paymentIntent.amount,
+    orderby: order.orderby.firstname + " " + order.orderby.lastname,
+  }));
   
   return (
     <div className="my-4">
     <div className='bg-white shadow-md rounded-sm border'>
     <h3 className="scroll-m-20 text-2xl pl-7 py-4 font-semibold tracking-tight">Orders List</h3>
-    <Table  columns={columns} dataSource={data} />
+    <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">No</TableHead>
+              <TableHead>Product</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Count</TableHead>
+              <TableHead>Color</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Orderby</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: data.length }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell><Skeleton className="h-5 w-10" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
+                </TableRow>
+              ))
+            ) : (
+              data.map((item, key) => (
+                <TableRow key={key}>
+                  <TableCell>{item.no}</TableCell>
+                  <TableCell className="font-medium text-sm">{item.product}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell>{item.count}</TableCell>
+                  <TableCell>{item.color}</TableCell>
+                  <TableCell>{item.method}</TableCell>
+                  <TableCell>{item.date}</TableCell>
+                  <TableCell>{item.amount}</TableCell>
+                  <TableCell>{item.orderby}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
     </div>
   </div>
   )
