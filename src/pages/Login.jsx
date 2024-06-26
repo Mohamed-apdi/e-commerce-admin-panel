@@ -65,6 +65,7 @@ const Login = () => {
               <Input
                 id="email"
                 name="email"
+                autoComplete="off"
                 type="text"
                 placeholder="you@example.com"
                 onChange={formik.handleChange}
