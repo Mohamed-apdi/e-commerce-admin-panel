@@ -186,10 +186,10 @@ const MainLayout = () => {
                 <DropdownMenuTrigger asChild>
                 <div className='flex gap-3 items-center hover:bg-gray-200 cursor-pointer h-[63.4px] p-1'>
                   <span className='bg-gray-300 py-1.5 text-muted-foreground px-1.5 rounded-full w-10 h-10 text-center font-bold text-xl'>
-                  {user ? getInitials(user.fastname, user.lastname) : 'AZ'}
+                  {user ? getInitials(user.firstname, user.lastname) : 'AZ'}
                   </span>
                     <div>
-                    <h5 className='mb-0 text-sm'>{user ? user.fastname: ""}</h5>
+                    <h5 className='mb-0 text-sm'>{user ? user.firstname: ""}</h5>
                     <p className='mb-0 text-xs'>{user ? user.email: ""}</p>
                     </div>
                 </div>

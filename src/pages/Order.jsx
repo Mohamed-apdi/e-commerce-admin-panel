@@ -27,16 +27,17 @@ const Order = () => {
   
   const data = orders.map((order, index) => ({
     no: index + 1,
-    product: order.products.map((item) => item.product.title).join(", "),
+    product: order.products.map((item) => item.product ? item.product.title : "Unknown Product").join(", "),
     status: order.orderStatus,
-    count: order.products.map((item) => item.count).join(", "), 
-    color: order.products.map((item) => item.product.color).join(", "), // Adjusted to match your data structure
-    price: order.products.map((item) => item.product.price).join(", "),
-    method: order.paymentIntent.method,
+    count: order.products.map((item) => item.count).join(", "),
+    color: order.products.map((item) => item.color ? item.color : "Unknown Color").join(", "),
+    price: order.products.map((item) => item.product ? item.product.price : "Unknown Price").join(", "),
+    method: order.paymentIntent?.method || "Unknown Method",
     date: new Date(order.createdAt).toLocaleString(),
-    amount: order.paymentIntent.amount,
-    orderby: order.orderby.firstname + " " + order.orderby.lastname,
+    amount: order.paymentIntent?.amount || "Unknown Amount",
+    orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "Unknown User",
   }));
+  console.log(data)
   
   return (
     <div className="my-4">
@@ -69,7 +70,7 @@ const Order = () => {
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
-                  <TableCell className="font-medium text-sm">{item.product}</TableCell>
+                  <TableCell className="font-medium text-xs">{item.product}</TableCell>
                   <TableCell>{item.status}</TableCell>
                   <TableCell>{item.count}</TableCell>
                   <TableCell>{item.color}</TableCell>

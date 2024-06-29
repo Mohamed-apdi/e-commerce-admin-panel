@@ -27,7 +27,7 @@ const Customers = () => {
 
   const data = customers.map((user, index) => ({
     no: index + 1,
-    name: `${user.fastname} ${user.lastname}`,
+    name: `${user.firstname} ${user.lastname}`,
     email: user.email,
     phone: user.mobile,
     role: (

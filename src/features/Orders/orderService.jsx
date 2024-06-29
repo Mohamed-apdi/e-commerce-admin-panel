@@ -1,7 +1,7 @@
 import apiClient from "@/utils/axiosConfig";
 
 const getOrders= async () => {
-    const response = await apiClient.get(`user/all-orders`);
+    const response = await apiClient.get(`user/orders`);
     return response.data;
 }
 
