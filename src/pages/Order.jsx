@@ -27,17 +27,16 @@ const Order = () => {
   
   const data = orders.map((order, index) => ({
     no: index + 1,
-    product: order.products.map((item) => item.product ? item.product.title : "Unknown Product").join(", "),
+    product: order.products.map((item) => item.product ? item.product.title : "").join(""),
     status: order.orderStatus,
     count: order.products.map((item) => item.count).join(", "),
-    color: order.products.map((item) => item.color ? item.color : "Unknown Color").join(", "),
-    price: order.products.map((item) => item.product ? item.product.price : "Unknown Price").join(", "),
-    method: order.paymentIntent?.method || "Unknown Method",
-    date: new Date(order.createdAt).toLocaleString(),
-    amount: order.paymentIntent?.amount || "Unknown Amount",
-    orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "Unknown User",
+    color: order.products.map((item) => item.color ? item.color : "").join(", "),
+    price: order.products.map((item) => item.product ? item.product.price : "").join(", "),
+    method: order.paymentIntent?.method || "",
+    date: new Date(order.createdAt).toLocaleDateString(),
+    amount: order.paymentIntent?.amount || "",
+    orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "",
   }));
-  console.log(data)
   
   return (
     <div className="my-4">
@@ -70,13 +69,13 @@ const Order = () => {
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
-                  <TableCell className="font-medium text-xs">{item.product}</TableCell>
+                  <TableCell className="font-medium text-xs flex gap-5 flex-col">{item.product}</TableCell>
                   <TableCell>{item.status}</TableCell>
                   <TableCell>{item.count}</TableCell>
                   <TableCell>{item.color}</TableCell>
                   <TableCell>{item.method}</TableCell>
                   <TableCell>{item.date}</TableCell>
-                  <TableCell>{item.amount}</TableCell>
+                  <TableCell>${item.amount}</TableCell>
                   <TableCell>{item.orderby}</TableCell>
                 </TableRow>
               ))
