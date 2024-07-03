@@ -62,6 +62,12 @@ const Order = () => {
                 <TableRow key={index}>
                   <TableCell><Skeleton className="h-5 w-10" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
                 </TableRow>
               ))
