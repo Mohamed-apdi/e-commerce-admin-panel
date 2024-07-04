@@ -1,23 +1,24 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainLayout from "./components/MainLayout";
-import Login from "./pages/Login";
-import ForgetPassword from "./pages/ForgetPassword";
-import ResetPassword from "./pages/ResetPassword";
+import Login from "./pages/Auth/Login";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 import Dashboard from "./pages/Dashboard";
-import Enquiries from "./pages/Enquiries";
-import Blog from "./pages/Blog";
-import Blogcatlist from "./pages/Blogcatlist";
-import Order from "./pages/Order";
-import Customers from "./pages/Customers";
-import Colors from "./pages/Colors";
-import Products from "./pages/Products";
-import Brands from "./pages/Brands";
-import ProductCategory from "./pages/ProductCategory";
-import AddBlog from "./pages/AddBlog";
-import AddProduct from "./pages/AddProduct";
+import Enquiries from "./pages/Enquiries/Enquiries";
+import Blog from "./pages/Blog/Blog";
+import Blogcatlist from "./pages/Blog/Blogcatlist";
+import Order from "./pages/Orders/Order";
+import Customers from "./pages/Custom/Customers";
+import Colors from "./pages/Product/Colors";
+import Products from "./pages/Product/Products";
+import Brands from "./pages/Product/Brands";
+import ProductCategory from "./pages/Product/ProductCategory";
+import AddBlog from "./pages/Blog/AddBlog";
+import AddProduct from "./pages/Product/AddProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
-import UpdateProduct from "./pages/UpdateProduct";
+import UpdateProduct from "./pages/Product/UpdateProduct";
+import UpdateCustomer from "./pages/Custom/UpdateCustomer";
 
 function App() {
   return (
@@ -35,7 +36,8 @@ function App() {
             <Route path="blogs" element={<Blog />} />
             <Route path="blog-categorys" element={<Blogcatlist />} />
             <Route path="orders" element={<Order />} />
-            <Route path="customer" element={<Customers />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="customers/edit/:id" element={<UpdateCustomer />} />
             <Route path="product-colors" element={<Colors />} />
             <Route path="products" element={<Products />} />
             <Route path="product-brands" element={<Brands />} />

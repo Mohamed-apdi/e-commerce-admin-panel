@@ -48,10 +48,29 @@ const resetPassword = async (data) => {
     return response.data;
 };
 
+const updateUser = async ({id, data}) => {
+    const response = await apiClient.put(`/user/edit-user/${id}`,data)
+    return response.data;
+}
+
+const isBlocked = async (data) => {
+    const response = await apiClient.put(`/user/block-user/${data.id}`);
+    return response;
+}
+
+const unBlocked = async (data) => {
+    const response = await apiClient.put(`/user/block-user/${data.id}`);
+    return response;
+}
+
+
 export const authService = {
     login,
     logout,
     refreshAccessToken,
     forgetPassword,
     resetPassword,
+    updateUser,
+    isBlocked,
+    unBlocked,
 };

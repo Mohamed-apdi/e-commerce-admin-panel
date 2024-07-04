@@ -36,13 +36,13 @@ const Customers = () => {
       </Badge>
     ),
     address: user.address,
-    isBlocked: user.isBlocked ? "Yes" : "No",
+    isBlocked: user.isBlocked ? "Blocked" : "unBlocked",
     action: (
       <div className='flex gap-2'>
-        <Link to={`/edit/${user.id}`}>
+        <Link to={`edit/${user._id}`}>
           <Pencil className='w-6 h-6 text-green-500 text-center hover:bg-gray-200 rounded p-[4px]' />
         </Link>
-        <Link to={`/delete/${user.id}`}>
+        <Link to={`delete/${user._id}`}>
           <Trash2 className='text-red-500 w-6 h-6 text-center hover:bg-gray-200 rounded p-[4px]' />
         </Link>
       </div>

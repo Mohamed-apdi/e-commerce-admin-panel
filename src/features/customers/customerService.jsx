@@ -5,8 +5,14 @@ const getUsers = async () => {
     return response.data;
 }
 
+const getUserId = async (id) => {
+    const response = await apiClient.get(`/user/${id}`);
+    return response.data;
+}
+
 export const customerService = {
     getUsers,
+    getUserId,
 }
 
 

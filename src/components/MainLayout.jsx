@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useDispatch } from 'react-redux';
 import { logout } from '@/features/auth/authSlice';
+import { Avatar, AvatarFallback} from "@/components/ui/avatar"
 
 
 
@@ -89,9 +90,9 @@ const MainLayout = () => {
             label: 'Dashboard',
           },
           {
-            key: 'customer',
+            key: 'customers',
             icon: <User className='w-6 h-6'/>,
-            label: 'Customer',
+            label: 'Customers',
           },
           {
             key: 'catalog',
@@ -185,9 +186,9 @@ const MainLayout = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                 <div className='flex gap-3 items-center hover:bg-gray-200 cursor-pointer h-[63.4px] p-1'>
-                  <span className='bg-gray-300 py-1.5 text-muted-foreground px-1.5 rounded-full w-10 h-10 text-center font-bold text-xl'>
-                  {user ? getInitials(user.firstname, user.lastname) : 'AZ'}
-                  </span>
+                  <Avatar>
+                    <AvatarFallback>{user ? getInitials(user.firstname, user.lastname) : ''}</AvatarFallback>
+                  </Avatar>
                     <div>
                     <h5 className='mb-0 text-sm'>{user ? user.firstname: ""}</h5>
                     <p className='mb-0 text-xs'>{user ? user.email: ""}</p>

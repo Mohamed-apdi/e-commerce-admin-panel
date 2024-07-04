@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../features/auth/authSlice'
+import { login } from '../../features/auth/authSlice'
 import { useEffect } from 'react'
 import toast, { Toaster } from "react-hot-toast";
 

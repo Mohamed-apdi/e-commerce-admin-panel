@@ -10,8 +10,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-
+import { Link } from 'react-router-dom';
+import { Pencil, Trash2 } from 'lucide-react';
 
 
 const Order = () => {
@@ -36,6 +36,16 @@ const Order = () => {
     date: new Date(order.createdAt).toLocaleDateString(),
     amount: order.paymentIntent?.amount || "",
     orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "",
+    action: (
+      <div className='flex gap-2'>
+        <Link to={`/edit/${order.id}`}>
+          <Pencil className='w-6 h-6 text-green-500 text-center hover:bg-gray-200 rounded p-[4px]' />
+        </Link>
+        <Link to={`/delete/${order.id}`}>
+          <Trash2 className='text-red-500 w-6 h-6 text-center hover:bg-gray-200 rounded p-[4px]' />
+        </Link>
+      </div>
+    )
   }));
   
   return (
@@ -54,6 +64,7 @@ const Order = () => {
               <TableHead>Date</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Orderby</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -61,6 +72,7 @@ const Order = () => {
               Array.from({ length: data.length }).map((_, index) => (
                 <TableRow key={index}>
                   <TableCell><Skeleton className="h-5 w-10" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
@@ -83,6 +95,7 @@ const Order = () => {
                   <TableCell>{item.date}</TableCell>
                   <TableCell>${item.amount}</TableCell>
                   <TableCell>{item.orderby}</TableCell>
+                  <TableCell>{item.action}</TableCell>
                 </TableRow>
               ))
             )}

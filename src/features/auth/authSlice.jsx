@@ -52,6 +52,32 @@ export const resetPassword = createAsyncThunk('auth/reset-password', async (data
         return thunkAPI.rejectWithValue({ message });
     }
 });
+
+export const updateUser = createAsyncThunk('auth/update-user', async ({ id, data }, thunkAPI) => {
+    try {
+        return await authService.updateUser({ id, data });
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+export const isBlocked = createAsyncThunk('auth/blocked-user', async (data, thunkAPI) => {
+    try {
+        return await authService.isBlocked(data);
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+export const unBlocked = createAsyncThunk('auth/unblocked-user', async (data, thunkAPI) => {
+    try {
+        return await authService.unBlocked(data);
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -73,6 +99,22 @@ const authSlice = createSlice({
                 state.isSuccess = false;
                 state.isError = true;
                 state.user = null;
+                state.message = action.payload.message;
+            })
+            .addCase(updateUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.update = action.payload;
+                state.message = '';
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
                 state.message = action.payload.message;
             })
             .addCase(logout.fulfilled, (state) => {
@@ -119,7 +161,39 @@ const authSlice = createSlice({
                 state.isSuccess = false;
                 state.isError = true;
                 state.message = action.payload.message;
-            });
+            })
+            .addCase(isBlocked.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(isBlocked.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.block = action.payload;
+                state.message = '';
+            })
+            .addCase(isBlocked.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload.message;
+            })
+            .addCase(unBlocked.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(unBlocked.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.unblock = action.payload;
+                state.message = '';
+            })
+            .addCase(unBlocked.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = false;
+                state.isError = true;
+                state.message = action.payload.message;
+            })
     },
 });
 

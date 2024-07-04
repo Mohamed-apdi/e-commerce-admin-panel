@@ -1,4 +1,4 @@
-import { deleteProduct, getProducts } from '../features/product/productSlice';
+import { deleteProduct, getProducts } from '../../features/product/productSlice';
 import {  Pencil, Trash2 } from 'lucide-react';
 import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';

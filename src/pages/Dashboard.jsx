@@ -1,59 +1,24 @@
-import { HiOutlineDotsVertical } from "react-icons/hi";
 import { IoTrendingUpOutline , IoTrendingDown  } from "react-icons/io5";
 import ReactECharts from 'echarts-for-react';
-import { Table } from 'antd';
 import { Separator } from '@/components/ui/separator';
 import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getRecentOrders } from "@/features/Orders/orderSlice";
+import { getOrders, getRecentOrders } from "@/features/Orders/orderSlice";
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
+import { IoCubeOutline,IoAnalyticsOutline  } from "react-icons/io5";
+import { TiChartBar } from "react-icons/ti";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
-
-
-const columns = [
-  {
-    title: 'No.',
-    dataIndex: 'no',
-  },
-  {
-    title: 'Product',
-    dataIndex: 'product',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-  },
-  {
-    title: 'Count',
-    dataIndex: 'count',
-  },
-  {
-    title: "Color",
-    dataIndex: "color",
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-  },
-  {
-    title: 'Method',
-    dataIndex: 'method',
-  },
-  {
-    title: 'Amount',
-    dataIndex: 'amount',
-  },
-  {
-    title: "Orderby",
-    dataIndex: "orderby",
-  },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-  },
-];
 
 
 const Dashboard = () => {
@@ -87,29 +52,34 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getRecentOrders());
+    dispatch(getOrders());
   },[dispatch]);
 
 
-  const recentOrderState = useSelector((state) => state.order.recentOrder);
-
-  const data = [];
-  for (let i = 0; i < recentOrderState.length; i++) {
-    data.push({
-      no: i + 1,
-      product: recentOrderState[i]?.products?.map((product) => product?.product?.title).join(" , ") || '',
-      status:recentOrderState[i].orderStatus || '',
-      count:recentOrderState[i].products.map((item) => item.count).join(" , ") || '',
-      color:recentOrderState[i].products.map((item) => item.color).join(" , ") || '',
-      method:recentOrderState[i].paymentIntent.method || '',
-      date:new Date(recentOrderState[i].createdAt).toLocaleString() || '',
-      amount:recentOrderState[i].paymentIntent.amount || '',
-      orderby:recentOrderState[i].orderby.fastname || '',
-      action: <div className='flex gap-2'><Link><Eye className='w-6 h-6 text-green-500 text-center hover:bg-gray-200  rounded p-[4px]'/></Link></div>,
-    });
-  }
-
+  const {recentOrder, isLoading} = useSelector((state) => state.order);
 
   
+  const data = recentOrder.map((order, index) => ({
+    no: index + 1,
+    product: order.products.map((item) => item.product ? item.product.title : "").join(""),
+    status: order.orderStatus,
+    count: order.products.map((item) => item.count).join(", "),
+    color: order.products.map((item) => item.color ? item.color : "").join(", "),
+    price: order.products.map((item) => item.product ? item.product.price : "").join(", "),
+    method: order.paymentIntent?.method || "",
+    date: new Date(order.createdAt).toLocaleDateString(),
+    amount: order.paymentIntent?.amount || "",
+    orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "",
+    action: (
+      <div className='flex gap-2'>
+        <Link to={`/delete/${order.id}`}>
+          <Eye className='text-blue-500 w-6 h-6 text-center hover:bg-gray-200 rounded p-[4px]' />
+        </Link>
+      </div>
+    )
+  }));
+
+
   return (
     <>
       <h3 className='scroll-m-20 pb-2 mb-5 text-3xl font-semibold tracking-tight first:mt-0'>Dashbard</h3>
@@ -117,7 +87,7 @@ const Dashboard = () => {
         <div className=" w-80 p-3 shadow-md border rounded-md bg-white">
           <div className="flex justify-between items-center">
             <h5 className="scroll-m-20 text-sm text-muted-foreground font-semibold tracking-tight">Total sells</h5>
-            <button><HiOutlineDotsVertical/></button>
+            <TiChartBar className="text-green-500 text-3xl"/>
           </div>
           <div className="mt-4 text-center flex justify-between">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">$3799.00</h3>
@@ -130,7 +100,7 @@ const Dashboard = () => {
         <div className=" w-80 p-3 shadow-md  border rounded-md bg-white">
           <div className="flex justify-between items-center">
             <h5 className="s`croll-m-20 text-sm text-muted-foreground font-semibold tracking-tight">Average order value</h5>
-            <button><HiOutlineDotsVertical/></button>
+            <button><IoAnalyticsOutline className="text-red-500 text-3xl"/></button>
           </div>
           <div className="mt-5 text-center flex justify-between">
             <h3 className="scroll-m-20 text-3xl font-semibold tracking-tight">$272.98</h3>
@@ -143,7 +113,7 @@ const Dashboard = () => {
         <div className=" w-80 p-3 shadow-md  border rounded-md bg-white">
           <div className="flex justify-between items-center">
             <h5 className="scroll-m-20 text-sm text-muted-foreground font-semibold tracking-tight">Total orders</h5>
-            <button><HiOutlineDotsVertical/></button>
+            <button><IoCubeOutline className="text-green-500 text-3xl"/></button>
           </div>
           <div className="mt-5 text-center flex justify-between">
             <h3 className="scroll-m-20 text-3xl font-semibold tracking-tight">578</h3>
@@ -267,7 +237,55 @@ const Dashboard = () => {
       <div className="my-4">
         <div className='bg-white shadow-md rounded-sm border'>
         <h3 className="scroll-m-20 text-2xl pl-7 py-4 font-semibold tracking-tight">Recent Orders</h3>
-        <Table columns={columns} dataSource={data} />
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">No</TableHead>
+              <TableHead>Product</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Count</TableHead>
+              <TableHead>Color</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Orderby</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              Array.from({ length: data.length }).map((_, index) => (
+                <TableRow key={index}>
+                  <TableCell><Skeleton className="h-5 w-10" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
+                  <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
+                </TableRow>
+              ))
+            ) : (
+              data.map((item, key) => (
+                <TableRow key={key}>
+                  <TableCell>{item.no}</TableCell>
+                  <TableCell className="font-medium text-xs flex gap-5 flex-col">{item.product}</TableCell>
+                  <TableCell>{item.status}</TableCell>
+                  <TableCell>{item.count}</TableCell>
+                  <TableCell>{item.color}</TableCell>
+                  <TableCell>{item.method}</TableCell>
+                  <TableCell>{item.date}</TableCell>
+                  <TableCell>${item.amount}</TableCell>
+                  <TableCell>{item.orderby}</TableCell>
+                  <TableCell>{item.action}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
         </div>
       </div>
 
