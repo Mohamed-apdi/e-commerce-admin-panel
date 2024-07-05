@@ -26,6 +26,14 @@ export const getUserId = createAsyncThunk("customer/get-a-customer", async (id, 
     }
 });
 
+export const deleteUser = createAsyncThunk("customer/delete-customer", async (id, thunkAPI) => {
+    try {
+        return await customerService.deleteUser(id);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
 export const resetState = createAction("reset");
 
 const customerSlice = createSlice({
@@ -44,7 +52,7 @@ const customerSlice = createSlice({
             state.isError = true;
             state.isSuccess = false;
             state.isLoading = false;
-            state.message = action.payload.message;
+            state.message = action.payload;
         })
         .addCase(getUserId.pending, (state) => {
             state.isLoading = true;
@@ -58,7 +66,21 @@ const customerSlice = createSlice({
             state.isSuccess = false;
             state.isLoading = false;
             state.customer = "";
-            state.message = action.payload.message;
+            state.message = action.payload;
+        })
+        .addCase(deleteUser.pending, (state) => {
+            state.isLoading = true;
+        }).addCase(deleteUser.fulfilled, (state, action) => {
+            state.isSuccess = true;
+            state.isLoading = false;
+            state.isError = false;
+            state.delete = action.payload;
+        }).addCase(deleteUser.rejected, (state, action) => {
+            state.isError = true;
+            state.isSuccess = false;
+            state.isLoading = false;
+            state.delete = "";
+            state.message = action.payload;
         })
         .addCase(resetState, () => initialState)
     }

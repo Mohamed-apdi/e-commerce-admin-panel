@@ -19,6 +19,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import UpdateProduct from "./pages/Product/UpdateProduct";
 import UpdateCustomer from "./pages/Custom/UpdateCustomer";
+import UpdateOrder from "./pages/Orders/UpdateOrder";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="blogs" element={<Blog />} />
             <Route path="blog-categorys" element={<Blogcatlist />} />
             <Route path="orders" element={<Order />} />
+            <Route path="orders/update/:id" element={<UpdateOrder />} />
             <Route path="customers" element={<Customers />} />
             <Route path="customers/edit/:id" element={<UpdateCustomer />} />
             <Route path="product-colors" element={<Colors />} />

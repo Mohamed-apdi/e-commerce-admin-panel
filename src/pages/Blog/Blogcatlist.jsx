@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { createCategory, deleteCategory, getBlogCategorys, updateCategory } from '@/features/blogCategory/bCategorySlice';
 import { Link } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { AlertCircle, Pencil, Trash2 } from 'lucide-react';
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -163,7 +163,7 @@ const Blogcatlist = () => {
                   <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
                 </TableRow>
               ))
-            ) : (
+            ) : data.length > 0 ? (
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
@@ -171,6 +171,15 @@ const Blogcatlist = () => {
                   <TableCell className="text-right">{item.action}</TableCell>
                 </TableRow>
               ))
+            ): (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  <div className="flex flex-col items-center">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mb-2" />
+                    <span className="text-gray-400">No data available</span>
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

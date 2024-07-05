@@ -4,6 +4,7 @@ import { OrdersService } from "./orderService";
 
 const initialState = {
     orders: [],
+    myorder:{},
     recentOrder:[],
     isError:false,
     isLoading:false,
@@ -19,9 +20,26 @@ export const getOrders = createAsyncThunk("order/get-orders", async (thunkAPI) =
     }
 })
 
+export const getOrderById = createAsyncThunk("order/get-myorder", async (id, thunkAPI) => {
+    try {
+        return await OrdersService.getOrderById(id);
+    } catch (error) {
+        return thunkAPI.rejectWithValue({ message: error.message, status: error.response?.status });
+    }
+});
+
+
 export const getRecentOrders = createAsyncThunk("order/get-recent-orders", async (thunkAPI) => {
     try {
         return await OrdersService.getRecentOrders();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+    }
+})
+
+export const updateOrder = createAsyncThunk("order/update-orders", async ({id,data}, thunkAPI) => {
+    try {
+        return await OrdersService.updateOrder({id, data});
     } catch (error) {
         return thunkAPI.rejectWithValue(error);
     }
@@ -43,7 +61,7 @@ export const getRecentOrders = createAsyncThunk("order/get-recent-orders", async
             state.isError = true;
             state.isSuccess = false;
             state.isLoading = false;
-            state.message = action.error;
+            state.message = action.payload.message;
         }).addCase(getRecentOrders.pending, (state) => {
             state.isLoading = true;
         }).addCase(getRecentOrders.fulfilled, (state,action) => {
@@ -55,7 +73,32 @@ export const getRecentOrders = createAsyncThunk("order/get-recent-orders", async
             state.isError = true;
             state.isSuccess = false;
             state.isLoading = false;
-            state.message = action.error;
+            state.message = action.payload.message;
+        }).addCase(getOrderById.pending, (state) => {
+            state.isLoading = true;
+        }).addCase(getOrderById.fulfilled, (state,action) => {
+            state.isSuccess = true;
+            state.isLoading = false;
+            state.isError = false;
+            state.myorder = action.payload;
+        }).addCase(getOrderById.rejected, (state,action) => {
+            state.isError = true;
+            state.isSuccess = false;
+            state.isLoading = false;
+            state.myorder = "not found";
+            state.message = action.payload.message;
+        }).addCase(updateOrder.pending, (state) => {
+            state.isLoading = true;
+        }).addCase(updateOrder.fulfilled, (state,action) => {
+            state.isSuccess = true;
+            state.isLoading = false;
+            state.isError = false;
+            state.update = action.payload;
+        }).addCase(updateOrder.rejected, (state,action) => {
+            state.isError = true;
+            state.isSuccess = false;
+            state.isLoading = false;
+            state.message = action.payload.message;
         })
     }
 });

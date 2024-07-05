@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { createBrands, deleteBrands, getBrands, updateBrands } from '@/features/brand/brandSlice';
-import { Pencil, Trash2 } from 'lucide-react';
+import { AlertCircle, Pencil, Trash2 } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast, { Toaster } from "react-hot-toast";
@@ -127,7 +127,7 @@ const Brands = () => {
                   <TableCell className="text-right"><Skeleton className="h-4 w-24" /></TableCell>
                 </TableRow>
               ))
-            ) : (
+            ) : data.length > 0 ? (
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
@@ -135,6 +135,15 @@ const Brands = () => {
                   <TableCell>{item.action}</TableCell>
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  <div className="flex flex-col items-center">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mb-2" />
+                    <span className="text-gray-400">No data available</span>
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

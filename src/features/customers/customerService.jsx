@@ -10,9 +10,15 @@ const getUserId = async (id) => {
     return response.data;
 }
 
+const deleteUser = async (id) => {
+    const response = await apiClient.delete(`/user/${id}`);
+    return response;
+}
+
 export const customerService = {
     getUsers,
     getUserId,
+    deleteUser,
 }
 
 

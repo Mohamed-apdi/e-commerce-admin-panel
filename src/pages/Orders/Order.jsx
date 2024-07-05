@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Pencil, Trash2 } from 'lucide-react';
+import { AlertCircle, Pencil, Trash2 } from 'lucide-react';
 
 
 const Order = () => {
@@ -38,10 +38,10 @@ const Order = () => {
     orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "",
     action: (
       <div className='flex gap-2'>
-        <Link to={`/edit/${order.id}`}>
+        <Link to={`update/${order._id}`}>
           <Pencil className='w-6 h-6 text-green-500 text-center hover:bg-gray-200 rounded p-[4px]' />
         </Link>
-        <Link to={`/delete/${order.id}`}>
+        <Link to={`/delete/${order._id}`}>
           <Trash2 className='text-red-500 w-6 h-6 text-center hover:bg-gray-200 rounded p-[4px]' />
         </Link>
       </div>
@@ -83,7 +83,7 @@ const Order = () => {
                   <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
                 </TableRow>
               ))
-            ) : (
+            ) : data.length > 0 ? (
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
@@ -98,6 +98,15 @@ const Order = () => {
                   <TableCell>{item.action}</TableCell>
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  <div className="flex flex-col items-center">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mb-2" />
+                    <span className="text-gray-400">No data available</span>
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

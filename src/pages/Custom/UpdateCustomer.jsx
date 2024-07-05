@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getUserId, resetState } from '@/features/customers/customerSlice';
 import { Skeleton } from "@/components/ui/skeleton";
-import { updateUser, isBlocked, unBlocked } from '@/features/auth/authSlice';
+import { updateUser } from '@/features/auth/authSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 const schema = Yup.object().shape({
   firstname: Yup.string().required('First name is required').max(15, 'Must be 15 characters or less'),
@@ -66,13 +68,18 @@ const UpdateCustomer = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-     if(values){
-      dispatch(updateUser({id, data: values}))
-      toast.success("Customer updated success.")
-      navigate("/admin/customers")
-     }else{
-      toast.error(formik.initialErrors)
-     }
+      if (values) {
+        dispatch(updateUser({ id, data: values }))
+          .then(() => {
+            toast.success("Customer updated successfully.");
+            navigate("/admin/customers");
+          })
+          .catch(() => {
+            toast.error("Error updating customer.");
+          });
+      } else {
+        toast.error("Please fill in the required fields.");
+      }
     }
   })
   return (
@@ -135,17 +142,20 @@ const UpdateCustomer = () => {
                 ) : null}
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="mobile">mobile</Label>
-              <Input id="mobile" placeholder="Enter your mobile..."
-              name="mobile"
-              onChange={formik.handleChange("mobile")}
-              onBlur={formik.handleBlur("mobile")}
-              value={formik.values.mobile} 
-              />
-              {formik.touched.mobile && formik.errors.mobile ? (
-                  <div className='text-xs text-red-500'>{formik.errors.mobile}</div>
-                ) : null}
-            </div>
+                    <Label htmlFor="mobile">Mobile</Label>
+                    <PhoneInput
+                      id="mobile"
+                      placeholder="Enter your mobile..."
+                      name="mobile"
+                      country={'us'}
+                      value={formik.values.mobile}
+                      onChange={(value) => formik.setFieldValue('mobile', value)}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.mobile && formik.errors.mobile ? (
+                      <div className="text-xs text-red-500">{formik.errors.mobile}</div>
+                    ) : null}
+                  </div>
               
             <div className="flex flex-col space-y-1.5">
                   <Label>User Role</Label>

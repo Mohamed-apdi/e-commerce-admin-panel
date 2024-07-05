@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getOrders, getRecentOrders } from "@/features/Orders/orderSlice";
 import { Link } from "react-router-dom";
-import { Eye } from "lucide-react";
+import { AlertCircle, Eye } from "lucide-react";
 import { IoCubeOutline,IoAnalyticsOutline  } from "react-icons/io5";
 import { TiChartBar } from "react-icons/ti";
 import {
@@ -268,7 +268,7 @@ const Dashboard = () => {
                   <TableCell className="text-right"><Skeleton className="h-5 w-24" /></TableCell>
                 </TableRow>
               ))
-            ) : (
+            ) : data.length > 0 ? (
               data.map((item, key) => (
                 <TableRow key={key}>
                   <TableCell>{item.no}</TableCell>
@@ -283,6 +283,15 @@ const Dashboard = () => {
                   <TableCell>{item.action}</TableCell>
                 </TableRow>
               ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  <div className="flex flex-col items-center">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mb-2" />
+                    <span className="text-gray-400">No data available</span>
+                  </div>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
