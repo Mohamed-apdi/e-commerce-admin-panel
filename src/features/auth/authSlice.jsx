@@ -61,6 +61,7 @@ export const updateUser = createAsyncThunk('auth/update-user', async ({ id, data
         return thunkAPI.rejectWithValue({ message });
     }
 });
+
 export const isBlocked = createAsyncThunk('auth/blocked-user', async (data, thunkAPI) => {
     try {
         return await authService.isBlocked(data);
@@ -69,6 +70,7 @@ export const isBlocked = createAsyncThunk('auth/blocked-user', async (data, thun
         return thunkAPI.rejectWithValue({ message });
     }
 });
+
 export const unBlocked = createAsyncThunk('auth/unblocked-user', async (data, thunkAPI) => {
     try {
         return await authService.unBlocked(data);
@@ -193,7 +195,7 @@ const authSlice = createSlice({
                 state.isSuccess = false;
                 state.isError = true;
                 state.message = action.payload.message;
-            })
+            });
     },
 });
 

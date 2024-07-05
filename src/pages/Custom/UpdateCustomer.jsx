@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getUserId, resetState } from '@/features/customers/customerSlice';
 import { Skeleton } from "@/components/ui/skeleton";
-import { updateUser } from '@/features/auth/authSlice';
+import { updateUser, isBlocked, unBlocked } from '@/features/auth/authSlice';
 import toast, { Toaster } from 'react-hot-toast';
 
 const schema = Yup.object().shape({
@@ -69,6 +69,7 @@ const UpdateCustomer = () => {
      if(values){
       dispatch(updateUser({id, data: values}))
       toast.success("Customer updated success.")
+      navigate("/admin/customers")
      }else{
       toast.error(formik.initialErrors)
      }

@@ -55,13 +55,13 @@ const updateUser = async ({id, data}) => {
 
 const isBlocked = async (data) => {
     const response = await apiClient.put(`/user/block-user/${data.id}`);
-    return response;
-}
+    return response.data; // Return only the data
+};
 
 const unBlocked = async (data) => {
-    const response = await apiClient.put(`/user/block-user/${data.id}`);
-    return response;
-}
+    const response = await apiClient.put(`/user/unblock-user/${data.id}`);
+    return response.data; // Return only the data
+};
 
 
 export const authService = {
