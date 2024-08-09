@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AlertCircle, Pencil, Trash2 } from 'lucide-react';
-
+import classNames from 'classnames';
 
 const Order = () => {
 
@@ -28,13 +28,24 @@ const Order = () => {
   const data = orders.map((order, index) => ({
     no: index + 1,
     product: order.products.map((item) => item.product ? item.product.title : "").join(""),
-    status: order.orderStatus,
+    status: (
+      <span 
+      className={classNames('px-1.5 py-0.5 rounded-md text-black', {
+        'bg-green-500 text-white font-semibold': order.orderStatus === 'Paid',
+        'bg-red-500 text-white font-semibold': order.orderStatus === 'Cancelled',
+        'bg-yellow-500 text-white font-semibold': order.orderStatus === 'Processing',
+        'bg-gray-500 text-white font-semibold': order.orderStatus === 'Not processed',
+      })}
+      >
+      {order.orderStatus}
+    </span>
+    ),
     count: order.products.map((item) => item.count).join(", "),
     color: order.products.map((item) => item.color ? item.color : "").join(", "),
     price: order.products.map((item) => item.product ? item.product.price : "").join(", "),
     method: order.paymentIntent?.method || "",
     date: new Date(order.createdAt).toLocaleDateString(),
-    amount: order.paymentIntent?.amount || "",
+    amount: order.paymentIntent.amount || "no",
     orderby: order.orderby ? `${order.orderby.firstname} ${order.orderby.lastname}` : "",
     action: (
       <div className='flex gap-2'>
@@ -100,10 +111,10 @@ const Order = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center">
-                  <div className="flex flex-col items-center">
+                <TableCell colSpan={10} className="text-center">
+                  <div className="flex flex-col items-center justify-center">
                     <AlertCircle className="w-12 h-12 text-gray-400 mb-2" />
-                    <span className="text-gray-400">No data available</span>
+                    <span className="text-gray-400 ">No data available</span>
                   </div>
                 </TableCell>
               </TableRow>

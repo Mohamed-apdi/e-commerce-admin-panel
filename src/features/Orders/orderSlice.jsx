@@ -24,7 +24,7 @@ export const getOrderById = createAsyncThunk("order/get-myorder", async (id, thu
     try {
         return await OrdersService.getOrderById(id);
     } catch (error) {
-        return thunkAPI.rejectWithValue({ message: error.message, status: error.response?.status });
+        return thunkAPI.rejectWithValue(error);
     }
 });
 
@@ -85,7 +85,7 @@ export const updateOrder = createAsyncThunk("order/update-orders", async ({id,da
             state.isError = true;
             state.isSuccess = false;
             state.isLoading = false;
-            state.myorder = "not found";
+            state.myorder = "";
             state.message = action.payload.message;
         }).addCase(updateOrder.pending, (state) => {
             state.isLoading = true;

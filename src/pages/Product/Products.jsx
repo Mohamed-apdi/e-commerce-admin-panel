@@ -56,6 +56,7 @@ const Products = () => {
     price: formatPrice(product.price),
     sold: product.sold,
     quantity: product.quantity,
+    stock:product.stock,
     brand: product.brand,
     category: product.category,
     action: (
@@ -84,6 +85,7 @@ const Products = () => {
               <TableHead>Price</TableHead>
               <TableHead>Sold</TableHead>
               <TableHead>Quantity</TableHead>
+              <TableHead>Stock</TableHead>
               <TableHead>Brand</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Action</TableHead>
@@ -95,6 +97,7 @@ const Products = () => {
                 <TableRow key={index}>
                   <TableCell><Skeleton className="h-5"/></TableCell>
                   <TableCell><Skeleton className="h-10" /></TableCell>
+                  <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
                   <TableCell><Skeleton className="h-5" /></TableCell>
@@ -113,6 +116,7 @@ const Products = () => {
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.sold}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.stock}</TableCell>
                   <TableCell>{item.brand}</TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell className="text-right">{item.action}</TableCell>

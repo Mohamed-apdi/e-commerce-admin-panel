@@ -17,8 +17,9 @@ import {
 import { OrdersService } from "@/features/Orders/orderService"
 import { getOrderById, updateOrder } from "@/features/Orders/orderSlice"
 import { useEffect, useState } from "react"
+import toast, { Toaster } from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 
@@ -28,6 +29,7 @@ const UpdateOrder = () => {
     const { id } = useParams();
     const [status, setStatus] = useState("");
     const [orderStatusEnum, setOrderStatusEnum] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -37,13 +39,15 @@ const UpdateOrder = () => {
               const statuses = await OrdersService.getOrderStatusEnum();
               setOrderStatusEnum(statuses);
             } catch (error) {
-              console.error('Failed to fetch order status enum:', error);
+              toast.error("Failed to fetch order status enum:", error)
             }
           };
           fetchOrderStatusEnum();
     }, [dispatch, id])
 
-    const myorder = useSelector((state) => state.order.myorder);
+    const {myorder} = useSelector((state) => state.order);
+
+    
     
     useEffect(() => {
         if (myorder && myorder.orderStatus) {
@@ -55,9 +59,12 @@ const UpdateOrder = () => {
         setStatus(value);
       };
     
-      const handleSubmit = () => {
+      const handleSubmit =  () => {
         dispatch(updateOrder({ id, data: { status } }));
+        toast.success("Order status updated successfully");
+        navigate("/admin/orders");
       };
+      
   return (
     <div>
       <Card className="w-full">
@@ -89,6 +96,11 @@ const UpdateOrder = () => {
           <Button variant="outline">Cancel</Button>
           <Button onClick={handleSubmit}>Deploy</Button>
         </CardFooter>
+        
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       </Card>
     </div>
   )

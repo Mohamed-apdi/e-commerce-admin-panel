@@ -24,7 +24,7 @@ const ResetPassword = () => {
   useEffect(() => {
     if (!token) {
       toast.error("Token not found in URL");
-      navigate('/forget-password', { replace: true });  // Replace the current entry in the history stack
+      navigate('/forget-password');  // Replace the current entry in the history stack
     }
   }, [token, navigate]);
 
@@ -45,12 +45,13 @@ const ResetPassword = () => {
       const resetData = {
         token: token,
         password: values.password,
-      };
+      };            
+      
       dispatch(resetPassword(resetData))
         .unwrap()
         .then(() => {
           toast.success("Password has been reset successfully");
-          navigate('/', { replace: true });
+          navigate('/');
         })
         .catch(error => {
           toast.error(error.message);

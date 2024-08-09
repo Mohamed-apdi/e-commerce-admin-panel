@@ -92,7 +92,7 @@ export const resetState = createAction("Reset_all");
             state.isError = true;
             state.isSuccess = false;
             state.isLoading = false;
-            state.message = action.payload.message;
+            state.message = action.error;
         }).addCase(getProductById.pending, (state) => {
             state.isLoading = true;
         })

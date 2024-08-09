@@ -25,13 +25,14 @@ import { getColors } from "@/features/ProductColor/colorSlice"
 import { getProductCategorys } from "@/features/productCategory/pCategorySlice"
 import "react-widgets/styles.css";
 import AnimatedMulti from "@/components/AnimatedMulti"
-import TagsInput from "@/components/TagsInput"
 import Dropzone from "react-dropzone"
 import { uploadImg } from "@/features/upload/uploadSlice"
 import { X } from "lucide-react"
 import { createProduct, resetState } from "@/features/product/productSlice"
 import { useNavigate } from "react-router-dom"
 import toast, { Toaster } from "react-hot-toast"
+import Selects from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 
 let schema = Yup.object().shape({
@@ -56,7 +57,7 @@ const AddProduct = () => {
     const [tags, setTags] = useState([]);
     const [files, setFiles] = useState([]);
     const navigate = useNavigate();
-
+    const animatedComponents = makeAnimated();
     //  dispatch
      useEffect(() => {
       dispatch(getBrands());
@@ -149,14 +150,9 @@ const AddProduct = () => {
     };
 
     const tagOptions = [
-      { value: 'new', label: 'New' },
-      { value: 'sale', label: 'Sale' },
-      { value: 'popular', label: 'Popular' },
-      { value: 'featured', label: 'Featured' },
-      { value: 'limited', label: 'Limited' },
-      { value: 'exclusive', label: 'Exclusive' },
-      { value: 'special', label: 'Special' },
-    ];
+      'new', 'sale', 'popular', 'featured', 'limited', 'exclusive', 'special'
+    ].map(tag => ({ value: tag, label: tag }));
+    
   
 
   return (
@@ -234,11 +230,14 @@ const AddProduct = () => {
 
             <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="tags">Tags</Label>
-                  <TagsInput 
-                    options={tagOptions}
-                    value={tags}
-                    onChange={handleTagsChange}
-                  />
+                  <Selects
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      options={tagOptions}
+                      value={tags}
+                      onChange={handleTagsChange}
+                    />
                   {formik.touched.tags && formik.errors.tags ? (
                     <div className='text-xs text-red-500'>{formik.errors.tags}</div>
                   ) : null}
